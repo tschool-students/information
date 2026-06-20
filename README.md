@@ -1,20 +1,241 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# TSchool 校園資訊彙整站
 
-# Run and deploy your AI Studio app
+校園資訊的唯一真相來源。**學生活動、課程資訊、校規規定、校園公告**全部以 Markdown 檔案存放於 `content/` 下對應的資料夾，合併後自動部署上線，首頁可搜尋與分類篩選。
 
-This contains everything you need to run your app locally.
+---
 
-View your app in AI Studio: https://ai.studio/apps/drive/1C-ikCx5eU75PrlsfSgGAY3I7W89n0IFd
+## 目錄
 
-## Run Locally
+- [資訊如何上線](#資訊如何上線)
+- [四大分類與資料夾](#四大分類與資料夾)
+- [第一步：寫內容](#第一步寫內容)
+- [第二步：上傳 PR](#第二步上傳-pr)
+- [第三步：等待審核與部署](#第三步等待審核與部署)
+- [檔名命名規則](#檔名命名規則)
+- [Frontmatter 欄位說明](#frontmatter-欄位說明)
+- [常見問題](#常見問題)
 
-**Prerequisites:**  Node.js
+---
 
+## 資訊如何上線
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+```
+你在 Google Docs / 文字編輯器寫好內容
+        ↓
+到 GitHub 對應分類資料夾新增 .md 檔（本頁第二步有圖解）
+        ↓
+開一個 Pull Request（PR）讓學生會長或資訊部審核
+        ↓
+PR 合併後，Vercel 自動在 1–2 分鐘內部署上線
+```
+
+不需要會寫程式，不需要安裝任何軟體，只需要一個 GitHub 帳號。
+
+---
+
+## 四大分類與資料夾
+
+**分類由資料夾決定**：把檔案放進哪個資料夾，它就屬於哪一類，無需在 frontmatter 指定。
+
+| 分類 | 資料夾 | 適用內容 | 額外欄位 |
+|------|--------|----------|----------|
+| 學生活動 | `content/activities/` | 校慶、社團博覽會、音樂會等活動 | `location`、`host` |
+| 課程資訊 | `content/courses/` | 開課資訊、評分方式、選課建議 | 無 |
+| 校規規定 | `content/regulations/` | 章程、會議規則、財務辦法等條文 | `code`、`lastAmended` |
+| 其他資訊 | `content/info/` | 行事曆、獎學金、圖書館公告等 | 無 |
+
+新增分類請洽資訊部（需在 `src/lib/content.ts` 的 `DIR_CATEGORY` 加一行）。
+
+---
+
+## 第一步：寫內容
+
+### 1-1 在 Google Docs / 編輯器完稿
+
+把內文寫完、確認無誤後，匯出 Markdown：
+
+> **檔案 → 下載 → Markdown (.md)**
+
+解壓縮後用任意文字編輯器（記事本、VS Code 均可）打開那個 `.md` 檔。
+
+### 1-2 加上 Frontmatter
+
+在檔案**最頂部**（第一行）貼上以下區塊。共用欄位人人都填，類別專屬欄位視分類補上。
+
+**活動範例**（放 `content/activities/`）：
+
+```markdown
+---
+title: 校慶園遊會
+status: "報名中"
+date: "2026-11-15"
+location: "中央操場"
+host: "學生會活動部"
+tags: ["校慶", "園遊會", "全校"]
+summary: "一年一度校慶園遊會，各班與社團設攤。"
+---
+
+（活動內文從這裡開始）
+```
+
+**校規範例**（放 `content/regulations/`）：
+
+```markdown
+---
+title: 學生會財務管理辦法
+code: "SA-2026-004"
+status: "現行"
+date: "2026-06-01"
+lastAmended: "2026-06-01"
+summary: "規範學生會年度預算編列、核銷程序及財務公告義務。"
+---
+
+（法規內文從這裡開始）
+```
+
+完整法規範本請參考 [`content/regulations/_template.md`](content/regulations/_template.md)。
+
+### 1-3 內文格式
+
+章節用 `##` 標題（會自動生成右側章節目錄）。校規條文用 `**第X條**（條名）` 格式：
+
+```markdown
+## 第一章　總則
+
+**第一條**（立法目的）本辦法依學生會組織章程第九條規定訂定之。
+
+## 第二章　預算
+
+**第三條**（年度預算）每學年由財務部於第一學期開學兩週內完成預算草案...
+```
+
+活動／公告類則用一般段落與項目清單即可。
+
+---
+
+## 第二步：上傳 PR
+
+**全程在 GitHub 網頁介面操作，不需要終端機。**
+
+### 2-1 前往對應分類資料夾
+
+打開 GitHub 倉庫：[github.com/YC815/rules_system](https://github.com/YC815/rules_system)
+
+點進 `content` → 你要的分類資料夾（例如活動就點 `activities`）。
+
+### 2-2 新增檔案
+
+點右上角的 **「Add file」→「Create new file」**。
+
+### 2-3 填入檔名
+
+在頂部的檔名欄位輸入檔名，格式為：
+
+```
+NNN-slug.md
+```
+
+- `NNN`：三位數編號，接續該資料夾現有最大號碼
+- `slug`：英文小寫、用連字號分隔的簡稱
+
+範例：`004-sports-day.md`、`005-club-subsidy.md`
+
+### 2-4 貼入內容
+
+把第一步準備好的完整文字（含 frontmatter）貼入下方的編輯器。
+
+### 2-5 開 Pull Request
+
+頁面拉到底，選擇：
+
+> ⦿ **Create a new branch for this commit and start a pull request**
+
+分支名稱系統會自動產生（例如 `YC815-patch-1`），不需要改。
+
+點 **「Propose new file」**，再點 **「Create pull request」**。
+
+PR 標題建議格式：`新增：XXX活動` 或 `修正：XXX第X條`。
+
+---
+
+## 第三步：等待審核與部署
+
+1. 學生會長或資訊部幹部會在 PR 留言提出修改意見或直接核准。
+2. 如有修改意見，在 PR 頁面直接編輯檔案後再 commit，修改會自動加入同一個 PR。
+3. PR 被合併（Merge）後，Vercel 自動部署，**1–2 分鐘**內網站更新。
+
+---
+
+## 檔名命名規則
+
+| 欄位 | 規則 | 範例 |
+|------|------|------|
+| 編號 | 三位數，接續該資料夾現有最大號 | `004`、`005` |
+| slug | 英文小寫、連字號分隔 | `sports-day`、`club-subsidy` |
+| 副檔名 | 固定 `.md` | |
+
+完整範例：`004-sports-day.md`
+
+> 檔名只是網址的一部分（網址為 `/分類資料夾/檔名`），與分類無關；分類由所在資料夾決定。
+
+---
+
+## Frontmatter 欄位說明
+
+### 共用欄位（所有分類）
+
+| 欄位 | 必填 | 說明 | 範例值 |
+|------|------|------|--------|
+| `title` | ✅ | 標題全名 | `校慶園遊會` |
+| `summary` | ✅ | 一句話描述，顯示於卡片 | `一年一度校慶園遊會...` |
+| `date` | ✅ | 主要日期，格式 `YYYY-MM-DD`，用於排序與顯示 | `2026-11-15` |
+| `status` | 選填 | 狀態徽章（見下表） | `報名中` |
+| `tags` | 選填 | 標籤陣列，提供搜尋比對 | `["校慶", "全校"]` |
+
+### 類別專屬欄位（選填）
+
+| 欄位 | 適用分類 | 說明 | 範例值 |
+|------|----------|------|--------|
+| `code` | 校規 | 法規代碼 `SA-年份-流水號` | `SA-2026-004` |
+| `lastAmended` | 校規 | 最後修正日期 | `2026-09-01` |
+| `location` | 活動 | 活動地點 | `中央操場` |
+| `host` | 活動 | 主辦單位 | `學生會活動部` |
+
+> 校規舊檔以 `enacted` 作為施行日；系統相容此欄位（`date` 缺漏時自動採用 `enacted`）。新檔請直接用 `date`。
+
+**`status` 可用值**
+
+| 值 | 顏色 | 用途 |
+|----|------|------|
+| `現行` | 綠 | 校規目前有效 |
+| `草案` | 橘 | 尚未正式通過 |
+| `已廢止` | 灰 | 校規已停止適用 |
+| `報名中` | 綠 | 活動開放報名 |
+| `已結束` | 灰 | 活動已落幕 |
+
+`status` 為選填；省略時卡片不顯示徽章。
+
+---
+
+## 常見問題
+
+**Q：我沒有 GitHub 帳號怎麼辦？**  
+到 [github.com](https://github.com) 免費註冊，再請倉庫管理員將你加為 Collaborator。
+
+**Q：我要新增一個活動，檔案放哪？**  
+放進 `content/activities/`，frontmatter 至少填 `title`、`summary`、`date`，建議補 `location`、`host`、`status`、`tags`。
+
+**Q：要修正某幾條校規，怎麼提 PR？**  
+直接在 GitHub 倉庫 `content/regulations/` 找到該檔案，點右上角鉛筆圖示（Edit）編輯，修改後一樣走「Create a new branch → Pull request」流程。記得同步更新 `lastAmended` 日期。
+
+**Q：PR 開了之後發現內容打錯，還能改嗎？**  
+可以。在 PR 頁面點進修改過的檔案，再按鉛筆圖示直接在同一個分支上 commit，修改會自動反映在 PR 裡。
+
+**Q：Vercel 部署失敗怎麼辦？**  
+通知資訊部，PR 的 Checks 欄位會顯示錯誤訊息，通常是 frontmatter 格式有誤（缺少引號、日期格式不對，或忘了填 `date`）。
+
+**Q：想廢止一條舊法規或下架活動怎麼做？**  
+校規把 `status` 改成 `已廢止`、活動改成 `已結束`，提 PR 即可。若要完全移除，刪除該 `.md` 檔。
+
+**Q：課程成績可以查嗎？**  
+個人成績查詢需要登入系統，仍在規劃中（見 `content/courses/` 的建置中說明）。目前課程區僅提供公開課程資訊。
