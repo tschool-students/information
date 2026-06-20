@@ -34,13 +34,13 @@ export default async function HomePage() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="flex flex-col items-center text-center gap-6 max-w-2xl mx-auto">
               <span className="rounded-md border-2 border-foreground bg-card px-3 py-1 font-mono text-xs font-bold text-foreground">
-                CAMPUS INFO HUB
+                T-School Student Information
               </span>
               <h1 className="font-extrabold text-4xl sm:text-5xl text-foreground tracking-tight leading-tight">
-                校園資訊彙整站
+                學校資訊彙整
               </h1>
               <p className="text-lg font-medium text-muted-foreground max-w-md">
-                學生活動、課程資訊、校規規定與校園公告，一站查閱。搜尋與篩選，快速找到你要的資訊。
+                臺北市數位實驗高中的學生資訊彙整平台！
               </p>
 
               {/* stats */}
@@ -74,7 +74,7 @@ export default async function HomePage() {
       <footer className="border-t-2 border-dashed border-foreground/30 py-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           <span className="font-mono text-sm font-extrabold text-foreground">
-            校園<span className="text-primary">-</span>資訊
+            臺北市數位實驗高級中等學校學生自治會<span className="text-primary">-</span>學校資訊彙整
           </span>
           <span className="font-mono text-xs font-bold text-muted-foreground">
             © 2026 TSchool

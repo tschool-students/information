@@ -11,9 +11,9 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "校園資訊彙整站 — TSchool",
+  title: "學校資訊彙整｜臺北市數位實驗高中學生自治會",
   description:
-    "TSchool 校園資訊一站查閱：學生活動、課程資訊、校規規定與校園公告，支援搜尋與分類篩選。",
+    "校園資訊一站查閱：學生活動、課程資訊、校規規定與校園公告，支援搜尋與分類篩選。",
 };
 
 export default function RootLayout({
